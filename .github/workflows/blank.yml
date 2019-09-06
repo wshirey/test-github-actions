@@ -9,18 +9,18 @@ jobs:
     
     steps:    
     - uses: actions/setup-go@v1
-    - name: Perform previous benchmark
+    - name: Check out base branch
       uses: actions/checkout@v1
-      with:
-        ref: $GITHUB_BASE_REF
-      run: |
-        go test -run=NONE -benchmem=true -bench=. ./... > old.txt
+        with:
+          ref: $GITHUB_BASE_REF
+    - name: Perform previous benchmark      
+      run: go test -run=NONE -benchmem=true -bench=. ./... > old.txt
+    - name: Check out head branch
+      uses: actions/checkout@v1
+        with:
+          ref: $GITHUB_HEAD_REF
     - name: Perform current benchmark
-      uses: actions/checkout@v1
-      with:
-        ref: $GITHUB_HEAD_REF
-      run: |
-        go test -run=NONE -benchmem=true -bench=. ./... > old.txt
+      run: go test -run=NONE -benchmem=true -bench=. ./... > new.txt
     - name: Compare benchmarks
       run: benchmp old.text new.text
     - name: Print env
