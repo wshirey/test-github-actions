@@ -6,19 +6,19 @@ jobs:
   benchmark:
 
     runs-on: ubuntu-latest
-    
-    steps:    
+
+    steps:
     - uses: actions/setup-go@v1
     - name: Check out base branch
-      uses: actions/checkout@v1
-        with:
-          ref: $GITHUB_BASE_REF
-    - name: Perform previous benchmark      
+      uses: actions/checkout@master
+      with:
+        ref: $GITHUB_BASE_REF
+    - name: Perform previous benchmark
       run: go test -run=NONE -benchmem=true -bench=. ./... > old.txt
     - name: Check out head branch
       uses: actions/checkout@v1
-        with:
-          ref: $GITHUB_HEAD_REF
+      with:
+        ref: $GITHUB_HEAD_REF
     - name: Perform current benchmark
       run: go test -run=NONE -benchmem=true -bench=. ./... > new.txt
     - name: Compare benchmarks
@@ -26,4 +26,4 @@ jobs:
     - name: Print env
       run: printenv
     - name: Print POST event
-      run: cat $GITHUB_EVENT_PATH        
+      run: cat $GITHUB_EVENT_PATH
