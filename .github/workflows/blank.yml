@@ -10,6 +10,10 @@ jobs:
     steps:
     - uses: actions/setup-go@v1
     - run: go get golang.org/x/tools/cmd/benchcmp
+    - name: Print env
+      run: printenv
+    - name: Print POST event
+      run: cat $GITHUB_EVENT_PATH
     - name: Check out base branch
       uses: actions/checkout@master
       with:
@@ -28,7 +32,4 @@ jobs:
         go test -run=NONE -benchmem=true -bench=. ./... > new.txt
     - name: Compare benchmarks
       run: $GOROOT/bin/benchcmp old.text new.text
-    - name: Print env
-      run: printenv
-    - name: Print POST event
-      run: cat $GITHUB_EVENT_PATH
+
