@@ -14,13 +14,17 @@ jobs:
       with:
         ref: ${{ github.base_ref }}
     - name: Perform previous benchmark
-      run: go test -run=NONE -benchmem=true -bench=. ./... > old.txt
+      run: |
+        cd $GITHUB_WORKSPACE
+        go test -run=NONE -benchmem=true -bench=. ./... > old.txt
     - name: Check out head branch
       uses: actions/checkout@v1
       with:
         ref: ${{ github.head_ref }}
     - name: Perform current benchmark
-      run: go test -run=NONE -benchmem=true -bench=. ./... > new.txt
+      run: |
+        cd $GITHUB_WORKSPACE
+        go test -run=NONE -benchmem=true -bench=. ./... > new.txt
     - name: Compare benchmarks
       run: benchmp old.text new.text
     - name: Print env
