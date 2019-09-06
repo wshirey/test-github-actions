@@ -27,7 +27,7 @@ jobs:
         cd $GITHUB_WORKSPACE
         go test -run=NONE -benchmem=true -bench=. ./... > new.txt
     - name: Compare benchmarks
-      run: benchcmp old.text new.text
+      run: $GOPATH/bin/benchcmp old.text new.text
     - name: Print env
       run: printenv
     - name: Print POST event
