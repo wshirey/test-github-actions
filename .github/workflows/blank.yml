@@ -12,13 +12,13 @@ jobs:
     - name: Check out base branch
       uses: actions/checkout@master
       with:
-        ref: $GITHUB_BASE_REF
+        ref: "$GITHUB_BASE_REF"
     - name: Perform previous benchmark
       run: go test -run=NONE -benchmem=true -bench=. ./... > old.txt
     - name: Check out head branch
       uses: actions/checkout@v1
       with:
-        ref: $GITHUB_HEAD_REF
+        ref: "$GITHUB_HEAD_REF"
     - name: Perform current benchmark
       run: go test -run=NONE -benchmem=true -bench=. ./... > new.txt
     - name: Compare benchmarks
