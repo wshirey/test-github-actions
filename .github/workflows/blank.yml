@@ -32,5 +32,5 @@ jobs:
         cd $GITHUB_WORKSPACE
         go test -run=NONE -benchmem=true -bench=. ./... > new.txt
     - name: Compare benchmarks
-      run: ./bin/benchcmp old.text new.text
+      run: /go/bin/benchcmp old.text new.text
 
