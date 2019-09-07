@@ -27,6 +27,8 @@ jobs:
       with:
         ref: ${{ github.head_ref }}
     - name: Perform current benchmark
+      env:
+        GOPATH: ${{ $(go env GOPATH) }}
       run: |
         cd $GITHUB_WORKSPACE
         go test -run=NONE -benchmem=true -bench=. ./... > new.txt
