@@ -8,6 +8,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Set GOPATH
+      # temporary fix
+      # see https://github.com/actions/setup-go/issues/14
+      run: |
+        echo "##[set-env name=GOPATH;]$(dirname $GITHUB_WORKSPACE)"
+        echo "##[add-path]$(dirname $GITHUB_WORKSPACE)/bin"
+      shell: bash
     - uses: actions/setup-go@v1
     - run: go get golang.org/x/tools/cmd/benchcmp
     - name: Print env
@@ -27,8 +34,6 @@ jobs:
       with:
         ref: ${{ github.head_ref }}
     - name: Perform current benchmark
-      env:
-        GOPATH: ${{ go env GOPATH }}
       run: |
         cd $GITHUB_WORKSPACE
         go test -run=NONE -benchmem=true -bench=. ./... > new.txt
