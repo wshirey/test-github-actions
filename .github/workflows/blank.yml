@@ -9,8 +9,6 @@ jobs:
 
     steps:
     - uses: actions/setup-go@v1
-    - name: Install benchcmp tool
-      run: GOBIN=$PWD/bin go install golang.org/x/tools/cmd/benchcmp
     - name: Print env
       run: printenv
     - name: Print POST event
@@ -32,5 +30,5 @@ jobs:
         cd $GITHUB_WORKSPACE
         go test -run=NONE -benchmem=true -bench=. ./... > new.txt
     - name: Compare benchmarks
-      run: /go/bin/benchcmp old.text new.text
+      run: benchcmp old.text new.text
 
