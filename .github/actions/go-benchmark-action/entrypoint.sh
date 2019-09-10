@@ -1,7 +1,9 @@
 #!/bin/sh
 set -e
 
+echo "Changing directory to $GITHUB_WORKSPACE"
 cd "${GITHUB_WORKSPACE:-.}"
+ls
 
 set +e
 OUTPUT="$(benchcmp old.txt new.txt)"
