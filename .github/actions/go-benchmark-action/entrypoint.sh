@@ -1,10 +1,6 @@
 #!/bin/sh
 set -e
 
-echo "Changing directory to $HOME/benchmarks"
-cd "${HOME}/benchmarks"
-ls
-
 set +e
 OUTPUT="$(benchcmp old.txt new.txt)"
 SUCCESS=$?

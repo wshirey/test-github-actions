@@ -17,20 +17,19 @@ jobs:
       uses: actions/checkout@master
       with:
         ref: ${{ github.base_ref }}
+        path: base
     - name: Perform previous benchmark
       run: |
-        cd $GITHUB_WORKSPACE
-        mkdir $HOME/benchmarks
-        go test -run=NONE -benchmem=true -bench=. ./... > $HOME/benchmarks/old.txt
+        cd $GITHUB_WORKSPACE/base
+        go test -run=NONE -benchmem=true -bench=. ./... > ../old.txt
     - name: Check out head branch
       uses: actions/checkout@v1
       with:
         ref: ${{ github.head_ref }}
+        path: head
     - name: Perform current benchmark
       run: |
-        cd $GITHUB_WORKSPACE
-        go test -run=NONE -benchmem=true -bench=. ./... > $HOME/benchmarks/new.txt
+        cd $GITHUB_WORKSPACE/head
+        go test -run=NONE -benchmem=true -bench=. ./... > ../new.txt
     - name: Compare benchmarks
       uses: ./.github/actions/go-benchmark-action
-      env:
-        GO_BENCHMARK_DIR: $HOME/benchmarks
