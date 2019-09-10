@@ -32,6 +32,6 @@ jobs:
         go test -run=NONE -benchmem=true -bench=. ./... > $HOME/new_benchmark.txt
     - name: Compare benchmarks
       run: |
-        GOBIN=$PWD/bin go install golang.org/x/tools/cmd/benchcmp
+        GOBIN=$PWD/bin go get golang.org/x/tools/cmd/benchcmp
         ls $PWD/bin/
         $PWD/bin/benchcmp $HOME/old_benchmark.txt $HOME/new_benchmark.txt
