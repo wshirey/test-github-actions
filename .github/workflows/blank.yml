@@ -22,6 +22,7 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE
         go test -run=NONE -benchmem=true -bench=. ./... > $HOME/old_benchmark.txt
+        cat $HOME/old_benchmark.txt
     - name: Check out head branch
       uses: actions/checkout@v1
       with:
@@ -30,6 +31,13 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE
         go test -run=NONE -benchmem=true -bench=. ./... > $HOME/new_benchmark.txt
+        cat $HOME/new_benchmark.txt
+    - name: Verify benchmarks exist
+      run : |
+        echo "$HOME/old_benchmark.txt contents"
+        cat $HOME/old_benchmark.txt
+        echo "$HOME/new_benchmark.txt contents"
+        cat $HOME/new_benchmark.txt
     - name: Compare benchmarks
       uses: ./.github/actions/go-benchmark-action
     # - name: Compare benchmarks
