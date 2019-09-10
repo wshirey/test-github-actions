@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 
-echo "Changing directory to $GITHUB_WORKSPACE"
-cd "${GITHUB_WORKSPACE:-.}"
+echo "Changing directory to $GO_BENCHMARK_DIR"
+cd "${GO_BENCHMARK_DIR:-.}"
 ls
 
 set +e
