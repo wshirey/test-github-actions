@@ -21,15 +21,16 @@ jobs:
     - name: Perform previous benchmark
       run: |
         cd $GITHUB_WORKSPACE
-        go test -run=NONE -benchmem=true -bench=. ./... > ../old.txt
+        go test -run=NONE -benchmem=true -bench=. ./... > $HOME/old_benchmark.txt
     - name: Check out head branch
       uses: actions/checkout@v1
       with:
         ref: ${{ github.head_ref }}
-        path: head
     - name: Perform current benchmark
       run: |
         cd $GITHUB_WORKSPACE
-        go test -run=NONE -benchmem=true -bench=. ./... > ../new.txt
+        go test -run=NONE -benchmem=true -bench=. ./... > $HOME/new_benchmark.txt
     - name: Compare benchmarks
-      uses: ./.github/actions/go-benchmark-action
+      run: |
+        ls -R $HOME
+        $HOME/go/bin/benchmp $HOME/old_benchmark.txt $HOME/new_benchmark.txt
