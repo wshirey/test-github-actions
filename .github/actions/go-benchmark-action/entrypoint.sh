@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 
-echo "Changing directory to $GO_BENCHMARK_DIR"
-cd "${GO_BENCHMARK_DIR:-.}"
+echo "Changing directory to $HOME/benchmarks"
+cd "${HOME}/benchmarks:-."
 ls
 
 set +e
