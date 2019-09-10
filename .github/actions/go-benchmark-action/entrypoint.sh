@@ -2,7 +2,7 @@
 set -e
 
 echo "Changing directory to $HOME/benchmarks"
-cd "${HOME}/benchmarks:-."
+cd "${HOME}/benchmarks"
 ls
 
 set +e
