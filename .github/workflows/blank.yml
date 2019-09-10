@@ -31,7 +31,8 @@ jobs:
         cd $GITHUB_WORKSPACE
         go test -run=NONE -benchmem=true -bench=. ./... > $HOME/new_benchmark.txt
     - name: Compare benchmarks
-      run: |
-        GOBIN=$PWD/bin go get golang.org/x/tools/cmd/benchcmp
-        ls $PWD/bin/
-        $PWD/bin/benchcmp $HOME/old_benchmark.txt $HOME/new_benchmark.txt
+      uses: ./.github/actions/go-benchmark-action
+    # - name: Compare benchmarks
+    #   run: |
+    #     GOBIN=$PWD/bin go get golang.org/x/tools/cmd/benchcmp
+    #     $PWD/bin/benchcmp $HOME/old_benchmark.txt $HOME/new_benchmark.txt

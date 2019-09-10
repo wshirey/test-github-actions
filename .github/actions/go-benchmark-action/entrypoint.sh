@@ -2,7 +2,7 @@
 set -e
 
 set +e
-OUTPUT="$(benchcmp old.txt new.txt)"
+OUTPUT="$(benchcmp $HOME/old_benchmark.txt new_benchmark.txt)"
 SUCCESS=$?
 echo $SUCCESS
 set -e
