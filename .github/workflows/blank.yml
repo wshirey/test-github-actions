@@ -32,5 +32,5 @@ jobs:
         go test -run=NONE -benchmem=true -bench=. ./... > $HOME/new_benchmark.txt
     - name: Compare benchmarks
       run: |
-        ls -R $HOME
-        $HOME/go/bin/benchmp $HOME/old_benchmark.txt $HOME/new_benchmark.txt
+        # ls -R $HOME
+        $PWD/bin/benchcmp $HOME/old_benchmark.txt $HOME/new_benchmark.txt
