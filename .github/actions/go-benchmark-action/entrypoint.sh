@@ -1,20 +1,25 @@
 #!/bin/sh
 set -e
 
-set +e
-OUTPUT="$(benchcmp $HOME/old_benchmark.txt $HOME/new_benchmark.txt)"
-echo $OUTPUT
-set -e
+run_go_benchmark() {
+    echo "checking out $GIT_COMMIT"
+    GIT_COMMIT=$1
+    BENCHMARK_FILE=$HOME/$GIT_COMMIT.txt
+    git clean -ffdx && git reset --hard HEAD
+    git checkout $GIT_COMMIT
+    echo "running project benchmarks"
+    go test -run=NONE -benchmem=true -bench=. ./... > $BENCHMARK_FILE
+    echo "benchmark results:"
+    cat $BENCHMARK_FILE
+    return $BENCHMARK_FILE
+}
 
-# Post results back as comment.
-COMMENT="#### \`benchcmp\`
-\`\`\`
-$OUTPUT
-\`\`\`
-"
-PAYLOAD=$(echo '{}' | jq --arg body "$COMMENT" '.body = $body')
-COMMENTS_URL=$(cat /github/workflow/event.json | jq -r .pull_request.comments_url)
+main() {
+    OLD_BENCHMARK_FILE=$(run_go_benchmark $GITHUB_BASE_REF)
+    NEW_BENCHMARK_FILE=$(run_go_benchmark $GITHUB_HEAD_REF)
+    BENCHCMP_RESULTS=$(benchcmp $OLD_BENCHMARK_FILE $NEW_BENCHMARK_FILE)
+    echo "benchcmp results:"
+    echo $BENCHCMP_RESULTS
+}
 
-if [ "COMMENTS_URL" != null ]; then
-  curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/json" --data "$PAYLOAD" "$COMMENTS_URL" > /dev/null
-fi
+main "$@"
