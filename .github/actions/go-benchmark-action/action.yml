@@ -1,0 +1,7 @@
+name: Go Benchmark
+author: Wally Shirey <waltshirey@gmail.com>
+description: Runs benchmarks and compares to base git commit
+branding:
+  icon: bar-chart
+  color: orange
+
