@@ -3,10 +3,9 @@ set -e
 
 add_issue_comment() {
    COMMENT="#### \`benchcmp \`
-    \`\`\`
-    $1
-    \`\`\`
-    "
+\`\`\`
+$1
+\`\`\`"
     PAYLOAD=$(echo '{}' | jq --arg body "$COMMENT" '.body = $body')
     COMMENTS_URL=$(cat /github/workflow/event.json | jq -r .pull_request.comments_url)
 
@@ -34,10 +33,10 @@ main() {
     mkdir -p "$(dirname "$NEW_BENCHMARK_FILE")" && touch "$NEW_BENCHMARK_FILE"
     run_go_benchmark $GITHUB_HEAD_REF $NEW_BENCHMARK_FILE
 
-    echo "running benchcmp $OLD_BENCHMARK_FILEt $NEW_BENCHMARK_FILE"
-    BENCHCMP_RESULTS=$(benchcmp $OLD_BENCHMARK_FILEt $NEW_BENCHMARK_FILE)
+    echo "running benchcmp $OLD_BENCHMARK_FILE $NEW_BENCHMARK_FILE"
+    BENCHCMP_RESULTS=$(benchcmp "$OLD_BENCHMARK_FILE" "$NEW_BENCHMARK_FILE")
     echo "adding comment with benchmp results"
-    add_issue_comment $BENCHCMP_RESULTS
+    add_issue_comment "$BENCHCMP_RESULTS"
 }
 
 main "$@"

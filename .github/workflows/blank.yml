@@ -16,6 +16,8 @@ jobs:
       uses: actions/checkout@master
     - name: Compare benchmarks
       uses: ./.github/actions/go-benchmark-action
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     # - name: Compare benchmarks
     #   run: |
     #     GOBIN=$PWD/bin go get golang.org/x/tools/cmd/benchcmp
