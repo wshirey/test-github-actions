@@ -13,6 +13,8 @@ jobs:
       run: printenv
     - name: Print POST event
       run: cat $GITHUB_EVENT_PATH
+    - name: Check out base branch
+      uses: actions/checkout@master
     - name: Compare benchmarks
       uses: ./.github/actions/go-benchmark-action
     # - name: Compare benchmarks
