@@ -25,10 +25,18 @@ run_go_benchmark() {
 
 main() {
     cd $GITHUB_WORKSPACE
-    run_go_benchmark $GITHUB_BASE_REF $HOME/$GITHUB_BASE_REF.txt
-    run_go_benchmark $GITHUB_HEAD_REF $HOME/$GITHUB_HEAD_REF.txt
-    echo "running benchcmp $HOME/$GITHUB_BASE_REF.txt $HOME/$GITHUB_HEAD_REF.txt"
-    BENCHCMP_RESULTS=$(benchcmp $HOME/$GITHUB_BASE_REF.txt $HOME/$GITHUB_HEAD_REF.txt)
+
+    OLD_BENCHMARK_FILE=$HOME/$GITHUB_BASE_REF.txt
+    mkdir -p "$(dirname "$OLD_BENCHMARK_FILE")" && touch "$OLD_BENCHMARK_FILE"
+    run_go_benchmark $GITHUB_BASE_REF $OLD_BENCHMARK_FILE
+
+    NEW_BENCHMARK_FILE=$HOME/$GITHUB_HEAD_REF.txt
+    mkdir -p "$(dirname "$NEW_BENCHMARK_FILE")" && touch "$NEW_BENCHMARK_FILE"
+    run_go_benchmark $GITHUB_HEAD_REF $NEW_BENCHMARK_FILE
+
+    echo "running benchcmp $OLD_BENCHMARK_FILEt $NEW_BENCHMARK_FILE"
+    BENCHCMP_RESULTS=$(benchcmp $OLD_BENCHMARK_FILEt $NEW_BENCHMARK_FILE)
+    echo "adding comment with benchmp results"
     add_issue_comment $BENCHCMP_RESULTS
 }
 
