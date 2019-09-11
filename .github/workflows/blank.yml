@@ -13,31 +13,6 @@ jobs:
       run: printenv
     - name: Print POST event
       run: cat $GITHUB_EVENT_PATH
-    - name: Check out base branch
-      uses: actions/checkout@master
-      with:
-        ref: ${{ github.base_ref }}
-        path: base
-    - name: Perform previous benchmark
-      run: |
-        cd $GITHUB_WORKSPACE
-        go test -run=NONE -benchmem=true -bench=. ./... > $HOME/old_benchmark.txt
-        cat $HOME/old_benchmark.txt
-    - name: Check out head branch
-      uses: actions/checkout@v1
-      with:
-        ref: ${{ github.head_ref }}
-    - name: Perform current benchmark
-      run: |
-        cd $GITHUB_WORKSPACE
-        go test -run=NONE -benchmem=true -bench=. ./... > $HOME/new_benchmark.txt
-        cat $HOME/new_benchmark.txt
-    - name: Verify benchmarks exist
-      run : |
-        echo "$HOME/old_benchmark.txt contents"
-        cat $HOME/old_benchmark.txt
-        echo "$HOME/new_benchmark.txt contents"
-        cat $HOME/new_benchmark.txt
     - name: Compare benchmarks
       uses: ./.github/actions/go-benchmark-action
     # - name: Compare benchmarks
