@@ -15,6 +15,6 @@ jobs:
     - name: Check out base branch
       uses: actions/checkout@master
     - name: Compare benchmarks
-      uses: ./.github/actions/go-benchmark-action
+      uses: shipot/go-benchmark-action@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
