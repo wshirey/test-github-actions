@@ -1,17 +1,36 @@
 #!/bin/sh
 set -e
 
+ACTION_WATERMARK="go-benchmark-action_b7eb8b69-badf-43e9-b776-24df51f5b5d3"
+
 add_issue_comment() {
-   COMMENT="#### \`benchcmp \`
+    COMMENTS_URL=$(cat /github/workflow/event.json | jq -r .pull_request.comments_url)
+    if [ -z "$COMMENTS_URL" ]; then
+        echo "no ''.pull_request.comments_url' property present in github event"
+        return
+    fi
+
+    UPDATE_COMMENT_URL=$(curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/json" "$COMMENTS_URL" | jq "map(select(.body | test(\""$ACTION_WATERMARK"\"))) | .[0].url" -r)
+    echo "$UPDATE_COMMENT_URL"
+    if [ "$UPDATE_COMMENT_URL" != "null" ]; then
+        COMMENTS_URL="$UPDATE_COMMENT_URL"
+        METHOD="PATCH"
+        echo "updating comment with url $COMMENTS_URL"
+    else
+        METHOD="POST"
+        echo "creating comment with url $COMMENTS_URL"
+    fi
+
+
+    COMMENT="
+<!--$ACTION_WATERMARK-->
+#### \`benchcmp \`
 \`\`\`
 $1
 \`\`\`"
     PAYLOAD=$(echo '{}' | jq --arg body "$COMMENT" '.body = $body')
-    COMMENTS_URL=$(cat /github/workflow/event.json | jq -r .pull_request.comments_url)
-
-    if [ "COMMENTS_URL" != null ]; then
-        curl -s -S -H "Authorization: token $GITHUB_TOKEN" --header "Content-Type: application/json" --data "$PAYLOAD" "$COMMENTS_URL" > /dev/null
-    fi
+    echo "curl -s -S -H "Authorization: token "$GITHUB_TOKEN"" --header "Content-Type: application/json" --data "$PAYLOAD" -X "$METHOD" "$COMMENTS_URL""
+    curl -s -S -H "Authorization: token "$GITHUB_TOKEN"" --header "Content-Type: application/json" --data "$PAYLOAD" -X "$METHOD" "$COMMENTS_URL" > /dev/null
 }
 
 run_go_benchmark() {
