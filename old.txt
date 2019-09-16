@@ -1,0 +1,5 @@
+goos: darwin
+goarch: amd64
+BenchmarkFib10-12    	 5000000	       263 ns/op	       0 B/op	       0 allocs/op
+PASS
+ok  	_/Users/wally/repos/test-github-actions	1.605s
