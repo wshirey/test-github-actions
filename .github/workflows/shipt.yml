@@ -4,6 +4,7 @@ jobs:
     benchmark:
         runs-on: ubuntu-latest
         steps:
+        - uses: actions/checkout@v1
         - name: Perform benchmarks
           if: github.event_name == 'pull_request' && github.event.action == 'synchronize'
           uses: shipt/go-benchmark-action@master
